@@ -23,8 +23,6 @@ const ImageGrid = ({ data }: ImagesDataType) => {
   const handleCloseDetail = () => {
     setShowDetail(false);
     setGridCols(4);
-    // setImage(selectedItem?.download_url);
-    // setAuthor(selectedItem?.author);
   };
 
   const XMark = (

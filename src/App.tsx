@@ -39,14 +39,6 @@ const App: React.FC = () => {
       setPage((prev) => prev + 1);
     }
   };
-
-  // useEffect(() => {
-  //   const target = document.querySelector(".search-container");
-  //   console.log("target->", target);
-  //   if (target) window.addEventListener("scroll", handleScroll);
-  //   return () => window?.removeEventListener("scroll", handleScroll); // Clean up the event listener
-  // }, []);
-
   return (
     <div className="app">
       <div onScroll={handleScroll} className="search-container overflow-auto">
