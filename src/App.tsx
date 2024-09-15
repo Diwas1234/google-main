@@ -1,26 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import SearchBar from "./components/SearchBar";
+import "./App.css";
+import ImageGrid from "./components/ImageGrid";
+import ApiService from "./appservice";
+import { ImageCardType } from "./type";
+// import { uniqueBy } from "lodash";
 
-function App() {
+const App: React.FC = () => {
+  const [data, setData] = useState<ImageCardType[]>([]);
+  const [page, setPage] = useState<number>(1);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const data = await ApiService.fetchImages(page, 10);
+        setData((prev) => [...data]);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+
+    fetchImages();
+  }, [page]);
+
+  const handleScroll = (e: any) => {
+    console.log("scrolling->", e);
+    const element = e.target;
+    console.log(
+      "element->",
+      element,
+      element.scrollHeight,
+      element.scrollTop,
+      element.clientHeight
+    );
+
+    if (element.scrollHeight - element.scrollTop == element.clientHeight) {
+      console.log("reached bottom");
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  // useEffect(() => {
+  //   const target = document.querySelector(".search-container");
+  //   console.log("target->", target);
+  //   if (target) window.addEventListener("scroll", handleScroll);
+  //   return () => window?.removeEventListener("scroll", handleScroll); // Clean up the event listener
+  // }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <div onScroll={handleScroll} className="search-container overflow-auto">
+        <SearchBar />
+        <ImageGrid data={data} />
+      </div>
     </div>
   );
-}
+};
 
 export default App;
